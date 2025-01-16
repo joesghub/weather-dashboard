@@ -1,18 +1,14 @@
 # 30 Days DevOps Challenge - Weather Dashboard
 
-Day 1: Building a weather data collection system using AWS S3 and OpenWeather API
-
-# Weather Data Collection System - DevOps Day 1 Challenge
-
 ## Project Overview
 This project is a Weather Data Collection System that demonstrates core DevOps principles by combining:
-- External API Integration (OpenWeather API)
-- Cloud Storage (AWS S3)
-- Infrastructure as Code
-- Version Control (Git)
-- Python Development
-- Error Handling
-- Environment Management
+- **External API Integration** (OpenWeather API)
+- **Cloud Storage** (AWS S3)
+- **Infrastructure as Code**
+- **Version Control** (Git)
+- **Python Development**
+- **Error Handling**
+- **Environment Management**
 
 ## Features
 - Fetches real-time weather data for multiple cities
@@ -31,6 +27,7 @@ This project is a Weather Data Collection System that demonstrates core DevOps p
   - requests
 
 ## Project Structure
+```
 weather-dashboard/
   src/
     __init__.py
@@ -40,141 +37,148 @@ weather-dashboard/
   .env
   .gitignore
   requirements.txt
-
-## Setup Instructions
-1. Clone the repository:
---bash
-git clone https://github.com/ShaeInTheCloud/30days-weather-dashboard.git
-
-3. Install dependencies:
-bashCopypip install -r requirements.txt
-
-4. Configure environment variables (.env):
-CopyOPENWEATHER_API_KEY=your_api_key
-AWS_BUCKET_NAME=your_bucket_name
-
-4.Configure AWS credentials:
-bashCopyaws configure
-
-5. Run the application:
-python src/weather_dashboard.py
-
+```
 
 ## Steps I Took
 
-1. Update environment - sudo apt update
-2. Install Github
-3. Authenticate Github
-4. Clone Repo
-5. Update remote origin
-6. Create Blank Repo
-7. Push Cloned Repo
-8. Install Python and Pip
-9. Install Requirements
-a. Issues downloading requirements
+1. **Update System Environment:**
+   ```bash
+   sudo apt update
+   ```
 
-error: externally-managed-environment
+2. **Install Git:**
+   - Installed Git to manage the code repository.
 
-× This environment is externally managed
-╰─> To install Python packages system-wide, try apt install
-    python3-xyz, where xyz is the package you are trying to
-    install.
+3. **Authenticate GitHub:**
+   - Authenticated GitHub to connect the repository with my account.
 
-Requirements.txt:
-boto3==1.26.137
-python-dotenv==1.0.0
-requests==2.28.2
+4. **Clone the Repository:**
+   - Cloned the repository to my local machine:
+     ```bash
+     git clone https://github.com/ShaeInTheCloud/30days-weather-dashboard.git
+     ```
 
-When I tried to install packages using pip install -r requirements.txt, the system detected that:
-- I was attempting to install packages into the system-wide Python environment.
-- Modifying the system Python environment directly could potentially break OS-level software or dependencies.
+5. **Update Remote Origin:**
+   - Updated the remote origin to point to the correct GitHub repository.
 
-Using sudo apt install resolved the issue because:
-- The packages you needed were available as pre-built Debian packages (python3-boto3, python3-dotenv, etc.).
-- apt is the recommended tool for managing system-level dependencies in Debian-based systems like Ubuntu.
-- The installation via apt ensured the system's package manager handled dependency resolution, maintaining system integrity.
+6. **Create a Blank GitHub Repository:**
+   - Created a new blank repository on GitHub to push the local clone.
 
-To avoid similar issues and maintain clean environments for Python projects:
+7. **Push Cloned Repo to GitHub:**
+   - Pushed the cloned repository to the newly created GitHub repo:
+     ```bash
+     git push -u origin master
+     ```
 
-Use Virtual Environments:
-Create a virtual environment:
-python3 -m venv venv
+8. **Install Python and Pip:**
+   - Installed Python and pip if not already installed:
+     ```bash
+     sudo apt install python3 python3-pip
+     ```
 
-Activate it:
-source venv/bin/activate
+9. **Install Project Requirements:**
+   - Attempted to install dependencies from `requirements.txt`:
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - **Issue:** An error occurred: `externally-managed-environment`
+     - This error occurred because I was trying to install the packages into the system-wide Python environment.
+     - To resolve the issue, I used `apt` to install the packages as pre-built Debian packages:
+       ```bash
+       sudo apt install python3-boto3 python3-dotenv python3-requests
+       ```
 
-Install your requirements in the virtual environment:
-pip install -r requirements.txt
-10. Install Python Venv and Reinstall Requirements.txt
-11. Install AWS CLI
-12. Configure AWS CLI
-13. Retrieve OpenWeather API Key
-14. Fill in .env file with Keys and Names
-a. Issues automating the bucket name creation so it is globally unique
+   - **Best Practice:** To avoid system-wide changes and maintain clean Python environments:
+     1. Create a virtual environment:
+        ```bash
+        python3 -m venv venv
+        ```
+     2. Activate the virtual environment:
+        ```bash
+        source venv/bin/activate
+        ```
+     3. Install the required packages inside the virtual environment:
+        ```bash
+        pip install -r requirements.txt
+        ```
 
-AWS_BUCKET_NAME=weather_dashboard_${RANDOM}
+10. **Install AWS CLI:**
+    - Installed the AWS Command Line Interface (CLI) to manage AWS services:
+      ```bash
+      sudo apt install awscli
+      ```
 
-The original application referenced the .env file to get a unique bucket name, however .env files do not interpret shell-specific variables [like ${RANDOM}] dynamically. The value will be treated as a literal string, meaning AWS_BUCKET_NAME will always equal "weather_dashboard_${RANDOM}".
+11. **Configure AWS CLI:**
+    - Configured the AWS CLI with my AWS credentials:
+      ```bash
+      aws configure
+      ```
 
-To ensure unique names were created dynamically, I needed to generate them in the script itself, not the .env file.
+12. **Retrieve OpenWeather API Key:**
+    - Retrieved an API key from OpenWeather and added it to the `.env` file.
 
-I went with a combined solution of referencing the .env file for the prefix of my S3 bucket name and generating a suffix dynamically in my script. 
+13. **Fill in the .env File:**
+    - Added the necessary keys to the `.env` file, including the OpenWeather API key and AWS bucket name.
 
-I wanted to use a method that relies on the .env file because I also store the OpenWeather API key in the file. Personally I rather have two pieces of information in the .env file to ensure it is working before making the API calls. My backup for the referencing of the prefix is a default prefix value which is included as a variable arguments. 
+14. **Issue with Automating Bucket Name Creation:**
+    - **Problem:** The original `.env` file contained the following line to generate a unique bucket name:
+      ```bash
+      AWS_BUCKET_NAME=weather_dashboard_${RANDOM}
+      ```
+    - **Issue:** `.env` files don’t interpret shell-specific variables like `${RANDOM}` dynamically.
+    - **Solution:** I had to modify the script to generate the unique bucket name dynamically, instead of relying on the `.env` file:
+      ```python
+      AWS_BUCKET_PREFIX = os.getenv('AWS_BUCKET_PREFIX', 'weather_dashboard')
+      ```
+      This way, I could still use a prefix from the `.env` file and dynamically generate the suffix within the script.
 
-AWS_BUCKET_PREFIX=weather_dashboard
-prefix = os.getenv('AWS_BUCKET_PREFIX', 'weather_dashboard')
+15. **Activate Virtual Environment:**
+    - Activated the virtual environment to ensure that the dependencies were installed and used correctly.
 
-15. Activate Venv
-16. Run Application
-a. Error creating bucket: An error occurred (IllegalLocationConstraintException) when calling the CreateBucket operation: The unspecified location constraint is incompatible for the region specific endpoint this request was sent to.
+16. **Run the Application:**
+    - Ran the application:
+      ```bash
+      python src/weather_dashboard.py
+      ```
 
-self.s3_client = boto3.client('s3', region_name='us-west-1')
-...
-self.s3_client.create_bucket(Bucket=self.bucket_name)
-print(f"Successfully created bucket {self.bucket_name} in us-west-1.")
+    **Error Handling During Bucket Creation:**
 
-The CreateBucket request doesn't include a 'CreateBucketConfiguration' when using a region-specific endpoint, and the bucket's region is inferred incorrectly. In regions other than us-east-1, you must specify the LocationConstraint in the CreateBucketConfiguration.
+    a. **Error: IllegalLocationConstraintException**  
+       When trying to create an S3 bucket in the `us-west-1` region, I encountered an error because the region wasn't specified correctly in the `CreateBucket` request. 
+       - **Solution:** Add the `LocationConstraint` to the `CreateBucketConfiguration`:
+         ```python
+         self.s3_client.create_bucket(
+             Bucket=self.bucket_name,
+             CreateBucketConfiguration={'LocationConstraint': 'us-west-1'}
+         )
+         ```
 
-The script used the us-west-1 endpoint (https://s3.us-west-1.amazonaws.com) but didn't specify a LocationConstraint. As a result, AWS inferred that the bucket was being created in the default region (us-east-1), which is incompatible with the region-specific endpoint.
+    b. **Error: InvalidBucketName**  
+       While creating the bucket, I encountered an error about the bucket name being invalid because it contained underscores, which are not allowed by AWS.  
+       - **Solution:** Replaced underscores with hyphens to make the bucket name valid:
+ 
 
-When using region_name='us-west-1' in the boto3.client, the LocationConstraint ensures alignment with the specified region.
+17. **Check the S3 Bucket:**
+    - Verified that the bucket was created successfully and all configurations were correct.
 
-CreateBucketConfiguration={
-                    'LocationConstraint': 'us-west-1'
-                }
-
-self.s3_client.create_bucket(
-                Bucket=self.bucket_name,
-                CreateBucketConfiguration={
-                    'LocationConstraint': 'us-west-1'
-                }
-            )
-
-I also took an opportunity to use the time.sleep() function from Python's time module to introduce a pause in the execution of the script. This will give some time for the bucket to be created and propagated before I proceed with saving data.
-
-b. Error creating bucket: An error occurred (InvalidBucketName) when calling the CreateBucket operation: The specified bucket is not valid.
-
-Bucket names can only contain lowercase letters, numbers, hyphens (-), and must start and end with a lowercase letter or number. Names like "weather_dashboard_6u3mv1" are invalid because they do not meet the AWS naming standards.
-
-Learning this, I went ahead and updated the script so the underscrores were all hyphens
-
-17. Check S3 Bucket
-18. Clean up Resources
+18. **Clean Up Resources:**
+    - Cleaned up any AWS resources, including the S3 bucket, to avoid unnecessary charges.
 
 ## What I Learned
 
-AWS S3 bucket creation and management
-Environment variable management for secure API keys
-Python best practices for API integration
-Git workflow for project development
-Error handling in distributed systems
-Cloud resource management
+- AWS S3 bucket creation and management
+- Environment variable management for secure API keys
+- Python best practices for API integration
+- Git workflow for project development
+- Error handling in distributed systems
+- Cloud resource management
 
 ## Future Enhancements
 
-Add weather forecasting
-Implement data visualization
-Add more cities
-Create automated testing
-Set up CI/CD pipeline
+- Add weather forecasting
+- Implement data visualization
+- Add more cities
+- Create automated testing
+- Set up CI/CD pipeline
+
+
