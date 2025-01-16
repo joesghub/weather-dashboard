@@ -1,3 +1,5 @@
 .env
 __pycache__/
 *.zip
+# Python virtual environment
+venv/
